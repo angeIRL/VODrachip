@@ -47,7 +47,7 @@
             margin-bottom: 8px;
             font-weight: bold;
         }
-        input[type="text"], input[type="password"], input[type="url"], input[type="file"] {
+        input[type="text"], input[type="password"], input[type="file"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -92,9 +92,6 @@
             <label for="title">Titre de la VOD</label>
             <input type="text" id="title" placeholder="Titre" required>
 
-            <label for="url">URL de la VOD</label>
-            <input type="url" id="url" placeholder="https://example.com" required>
-
             <label for="thumbnail">Miniature de la VOD</label>
             <input type="file" id="thumbnail" accept="image/*" onchange="previewThumbnail()">
             <img id="thumbnail-preview" alt="Aperçu de la miniature">
@@ -106,6 +103,7 @@
         </form>
     </main>
     <script>
+        // Mot de passe en clair pour cette démo (à remplacer par un système sécurisé côté serveur)
         const correctPassword = "Af6-'\"ç";
 
         function checkPassword() {
@@ -138,18 +136,18 @@
 
         function checkVideoDuration() {
             const fileInput = document.getElementById('video');
-            const videoFile = fileInput.files[0];
+            const file = fileInput.files[0];
 
-            if (videoFile) {
+            if (file) {
                 const videoElement = document.createElement('video');
-                videoElement.src = URL.createObjectURL(videoFile);
+                videoElement.src = URL.createObjectURL(file);
                 videoElement.onloadedmetadata = function() {
                     const duration = videoElement.duration;
-                    if (duration >= 2700) { // 45 minutes in seconds
-                        alert("Vidéo valide. Vous pouvez ajouter la VOD.");
+                    if (duration >= 2700) { // 45 minutes = 2700 seconds
+                        alert('Vidéo validée !');
                     } else {
-                        alert("La vidéo doit durer au moins 45 minutes.");
-                        fileInput.value = ''; // Reset file input
+                        alert('La vidéo doit durer 45 minutes ou plus.');
+                        fileInput.value = ''; // Réinitialiser le champ de fichier
                     }
                 };
             }
@@ -157,19 +155,17 @@
 
         function addVOD() {
             const title = document.getElementById('title').value;
-            const url = document.getElementById('url').value;
-            const thumbnail = document.getElementById('thumbnail').files[0];
             const video = document.getElementById('video').files[0];
+            const thumbnail = document.getElementById('thumbnail').files[0];
 
-            if (title && url && thumbnail && video) {
-                alert(`VOD ajoutée : ${title} (${url}) avec une miniature et une vidéo.`);
+            if (title && video && thumbnail) {
+                alert(`VOD ajoutée : ${title} avec une miniature et une vidéo.`);
                 document.getElementById('title').value = '';
-                document.getElementById('url').value = '';
-                document.getElementById('thumbnail').value = '';
                 document.getElementById('video').value = '';
+                document.getElementById('thumbnail').value = '';
                 document.getElementById('thumbnail-preview').style.display = 'none';
             } else {
-                alert('Veuillez remplir tous les champs et ajouter une miniature et une vidéo.');
+                alert('Veuillez remplir tous les champs et ajouter une vidéo et une miniature.');
             }
         }
     </script>
