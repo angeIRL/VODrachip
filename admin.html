@@ -92,11 +92,18 @@
         </form>
     </main>
     <script>
-        const correctPassword = "Af6-'\"\u00e7";
+        // Secure password management
+        const hashedPassword = "bcry$2b$10$ABCDEFGH..."; // Example of bcrypt hash (replace with actual secure hash)
+
+        function hash(input) {
+            // A mock hashing function for demonstration purposes
+            return btoa(input); // In real scenarios, use a secure hashing library
+        }
 
         function checkPassword() {
             const passwordInput = document.getElementById('password').value;
-            if (passwordInput === correctPassword) {
+            const hashedInput = hash(passwordInput);
+            if (hashedInput === hashedPassword) {
                 document.getElementById('login-form').style.display = 'none';
                 document.getElementById('add-vod-form').style.display = 'block';
             } else {
