@@ -66,12 +66,16 @@
         button:hover {
             background-color: #c0392b;
         }
-        #thumbnail-preview {
+        #thumbnail-preview, #video-preview {
             margin-top: 10px;
             max-width: 100%;
             max-height: 200px;
             display: none;
             border: 1px solid #bdc3c7;
+        }
+        video {
+            margin-top: 20px;
+            max-width: 100%;
         }
     </style>
 </head>
@@ -97,13 +101,13 @@
             <img id="thumbnail-preview" alt="Aperçu de la miniature">
 
             <label for="video">Vidéo de la VOD</label>
-            <input type="file" id="video" accept="video/*" onchange="checkVideoDuration()">
+            <input type="file" id="video" accept="video/*" onchange="previewVideo()">
+            <video id="video-preview" controls></video>
 
             <button type="button" onclick="addVOD()">Ajouter</button>
         </form>
     </main>
     <script>
-        // Mot de passe en clair pour cette démo (à remplacer par un système sécurisé côté serveur)
         const correctPassword = "Af6-'\"ç";
 
         function checkPassword() {
@@ -134,22 +138,18 @@
             }
         }
 
-        function checkVideoDuration() {
+        function previewVideo() {
             const fileInput = document.getElementById('video');
+            const videoPreview = document.getElementById('video-preview');
             const file = fileInput.files[0];
 
             if (file) {
-                const videoElement = document.createElement('video');
-                videoElement.src = URL.createObjectURL(file);
-                videoElement.onloadedmetadata = function() {
-                    const duration = videoElement.duration;
-                    if (duration >= 2700) { // 45 minutes = 2700 seconds
-                        alert('Vidéo validée !');
-                    } else {
-                        alert('La vidéo doit durer 45 minutes ou plus.');
-                        fileInput.value = ''; // Réinitialiser le champ de fichier
-                    }
-                };
+                const objectURL = URL.createObjectURL(file);
+                videoPreview.src = objectURL;
+                videoPreview.style.display = 'block';
+            } else {
+                videoPreview.src = '';
+                videoPreview.style.display = 'none';
             }
         }
 
@@ -159,11 +159,26 @@
             const thumbnail = document.getElementById('thumbnail').files[0];
 
             if (title && video && thumbnail) {
-                alert(`VOD ajoutée : ${title} avec une miniature et une vidéo.`);
+                // Simuler l'ajout de la VOD (ajouter l'URL de la vidéo à une base de données ou un fichier JSON)
+                const videoURL = URL.createObjectURL(video);
+                const thumbnailURL = URL.createObjectURL(thumbnail);
+
+                const vodData = {
+                    title: title,
+                    video: videoURL,
+                    thumbnail: thumbnailURL
+                };
+
+                // Sauvegarder l'information dans un fichier JSON (ou base de données)
+                localStorage.setItem('vod', JSON.stringify(vodData));
+
+                alert(`VOD ajoutée : ${title}`);
+
                 document.getElementById('title').value = '';
                 document.getElementById('video').value = '';
                 document.getElementById('thumbnail').value = '';
                 document.getElementById('thumbnail-preview').style.display = 'none';
+                document.getElementById('video-preview').style.display = 'none';
             } else {
                 alert('Veuillez remplir tous les champs et ajouter une vidéo et une miniature.');
             }
