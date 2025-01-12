@@ -99,11 +99,13 @@
             <input type="file" id="thumbnail" accept="image/*" onchange="previewThumbnail()">
             <img id="thumbnail-preview" alt="Aperçu de la miniature">
 
+            <label for="video">Vidéo de la VOD</label>
+            <input type="file" id="video" accept="video/*" onchange="checkVideoDuration()">
+
             <button type="button" onclick="addVOD()">Ajouter</button>
         </form>
     </main>
     <script>
-        // Mot de passe en clair pour cette démo (à remplacer par un système sécurisé côté serveur)
         const correctPassword = "Af6-'\"ç";
 
         function checkPassword() {
@@ -134,19 +136,40 @@
             }
         }
 
+        function checkVideoDuration() {
+            const fileInput = document.getElementById('video');
+            const videoFile = fileInput.files[0];
+
+            if (videoFile) {
+                const videoElement = document.createElement('video');
+                videoElement.src = URL.createObjectURL(videoFile);
+                videoElement.onloadedmetadata = function() {
+                    const duration = videoElement.duration;
+                    if (duration >= 2700) { // 45 minutes in seconds
+                        alert("Vidéo valide. Vous pouvez ajouter la VOD.");
+                    } else {
+                        alert("La vidéo doit durer au moins 45 minutes.");
+                        fileInput.value = ''; // Reset file input
+                    }
+                };
+            }
+        }
+
         function addVOD() {
             const title = document.getElementById('title').value;
             const url = document.getElementById('url').value;
             const thumbnail = document.getElementById('thumbnail').files[0];
+            const video = document.getElementById('video').files[0];
 
-            if (title && url && thumbnail) {
-                alert(`VOD ajoutée : ${title} (${url}) avec une miniature.`);
+            if (title && url && thumbnail && video) {
+                alert(`VOD ajoutée : ${title} (${url}) avec une miniature et une vidéo.`);
                 document.getElementById('title').value = '';
                 document.getElementById('url').value = '';
                 document.getElementById('thumbnail').value = '';
+                document.getElementById('video').value = '';
                 document.getElementById('thumbnail-preview').style.display = 'none';
             } else {
-                alert('Veuillez remplir tous les champs et ajouter une miniature.');
+                alert('Veuillez remplir tous les champs et ajouter une miniature et une vidéo.');
             }
         }
     </script>
