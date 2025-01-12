@@ -47,7 +47,7 @@
             margin-bottom: 8px;
             font-weight: bold;
         }
-        input[type="text"], input[type="password"], input[type="url"] {
+        input[type="text"], input[type="password"], input[type="url"], input[type="file"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -65,6 +65,13 @@
         }
         button:hover {
             background-color: #c0392b;
+        }
+        #thumbnail-preview {
+            margin-top: 10px;
+            max-width: 100%;
+            max-height: 200px;
+            display: none;
+            border: 1px solid #bdc3c7;
         }
     </style>
 </head>
@@ -88,22 +95,20 @@
             <label for="url">URL de la VOD</label>
             <input type="url" id="url" placeholder="https://example.com" required>
 
+            <label for="thumbnail">Miniature de la VOD</label>
+            <input type="file" id="thumbnail" accept="image/*" onchange="previewThumbnail()">
+            <img id="thumbnail-preview" alt="Aperçu de la miniature">
+
             <button type="button" onclick="addVOD()">Ajouter</button>
         </form>
     </main>
     <script>
-        // Secure password management
-        const hashedPassword = "bcry$2b$10$ABCDEFGH..."; // Example of bcrypt hash (replace with actual secure hash)
-
-        function hash(input) {
-            // A mock hashing function for demonstration purposes
-            return btoa(input); // In real scenarios, use a secure hashing library
-        }
+        // Mot de passe en clair pour cette démo (à remplacer par un système sécurisé côté serveur)
+        const correctPassword = "Af6-'\"ç";
 
         function checkPassword() {
             const passwordInput = document.getElementById('password').value;
-            const hashedInput = hash(passwordInput);
-            if (hashedInput === hashedPassword) {
+            if (passwordInput === correctPassword) {
                 document.getElementById('login-form').style.display = 'none';
                 document.getElementById('add-vod-form').style.display = 'block';
             } else {
@@ -111,16 +116,37 @@
             }
         }
 
+        function previewThumbnail() {
+            const fileInput = document.getElementById('thumbnail');
+            const preview = document.getElementById('thumbnail-preview');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '';
+                preview.style.display = 'none';
+            }
+        }
+
         function addVOD() {
             const title = document.getElementById('title').value;
             const url = document.getElementById('url').value;
+            const thumbnail = document.getElementById('thumbnail').files[0];
 
-            if (title && url) {
-                alert(`VOD ajoutée : ${title} (${url})`);
+            if (title && url && thumbnail) {
+                alert(`VOD ajoutée : ${title} (${url}) avec une miniature.`);
                 document.getElementById('title').value = '';
                 document.getElementById('url').value = '';
+                document.getElementById('thumbnail').value = '';
+                document.getElementById('thumbnail-preview').style.display = 'none';
             } else {
-                alert('Veuillez remplir tous les champs.');
+                alert('Veuillez remplir tous les champs et ajouter une miniature.');
             }
         }
     </script>
