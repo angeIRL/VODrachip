@@ -10,11 +10,13 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            background-color: #f9f9f9;
         }
         header {
             background-color: #333;
             color: white;
             padding: 10px 20px;
+            text-align: center;
         }
         header h1 {
             margin: 0;
@@ -51,6 +53,26 @@
             width: calc(33.333% - 10px);
             box-sizing: border-box;
         }
+        #reseaux {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        #reseaux a {
+            display: inline-block;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        #reseaux a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
         footer {
             background-color: #333;
             color: white;
@@ -81,13 +103,11 @@
         </section>
         <section id="reseaux">
             <h2>Réseaux d'AngeDrachip</h2>
-            <ul>
-                <li><a href="https://www.youtube.com/c/AngeDrachip" target="_blank">YouTube</a></li>
-                <li><a href="https://kick.com/AngeDrachip" target="_blank">Kick</a></li>
-                <li><a href="https://twitter.com/AngeDrachip" target="_blank">Twitter</a></li>
-                <li><a href="https://www.instagram.com/AngeDrachip" target="_blank">Instagram</a></li>
-                <li><a href="https://www.twitch.tv/AngeDrachip" target="_blank">Twitch</a></li>
-            </ul>
+            <a href="https://www.youtube.com/c/AngeDrachip" target="_blank">YouTube</a>
+            <a href="https://kick.com/AngeDrachip" target="_blank">Kick</a>
+            <a href="https://twitter.com/AngeDrachip" target="_blank">Twitter</a>
+            <a href="https://www.instagram.com/AngeDrachip" target="_blank">Instagram</a>
+            <a href="https://www.twitch.tv/AngeDrachip" target="_blank">Twitch</a>
         </section>
     </main>
     <footer>
